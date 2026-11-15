@@ -6,7 +6,7 @@ A system for planning air cargo flights and loads. A Spring Boot backend, built 
 
 - **Flight planning:** register, correct and remove delays (IATA delay codes, 1 minute to 12 hours), with ETD and ETA derived from them. Record actual departure and arrival with validation, following the lifecycle Scheduled → Departed → Landed.
 - **Load planning:** a Boeing 747-400 freighter floor plan where ULDs (cargo containers) are placed, moved and removed during a loading window. Automatic load checks cover lateral balance, offloading and unloaded cargo, each with hard or soft warnings. The load can be declared final.
-- **Messaging:** incoming schedule (SSM) and ULD booking feeds over RabbitMQ. Duplicates are handled idempotently, and invalid messages go to a dead-letter queue. Outgoing partner messages (FLM, MVT, CPM) use the transactional outbox pattern.
+- **Messaging:** incoming schedule (SSM) and ULD booking feeds over RabbitMQ. Duplicates are handled idempotently, and invalid messages go to a dead-letter queue. Outgoing partner messages (FLM, MVT telegrams, CPM) are sent after commit through Spring Modulith's event publication registry, which acts as an outbox. Failed messages are resubmitted automatically when RabbitMQ is back.
 - **Security:** an OAuth2 resource server with Keycloak. Every request needs a token, and the roles (`flight-planner`, `load-planner`, `admin`) decide who may change what. The frontend uses Authorization Code + PKCE.
 - **Operations:** policy settings stored in the database and changed only by the admin. An hourly retention job removes old flights. Validation errors are returned as `400` ProblemDetails, and refused requests and broker errors are logged.
 - **Frontend:** feature-based structure, with server state in TanStack Query (polling every 30 seconds), routing with React Router and an MUI design system. Lint rules enforce the boundaries between features.
@@ -70,7 +70,7 @@ To fill the system with demo flights and bookings: `backend/src/test/http/seed-d
 
 - **Domain-Driven Design:** bounded contexts, aggregates, value objects and keeping business rules inside the domain model.
 - **Modular architecture:** Spring Modulith modules with verified boundaries, and hexagonal ports and adapters.
-- **Messaging:** event-driven integration with RabbitMQ, idempotent consumers, dead-letter queues and the transactional outbox.
+- **Messaging:** event-driven integration with RabbitMQ, idempotent consumers, dead-letter queues and an outbox via Spring Modulith's event publication registry.
 - **Security:** OAuth2/OIDC with Keycloak, JWT validation, role-based authorization and PKCE in a single-page app.
 - **React and TypeScript:** structuring a front-end by feature, managing server state with TanStack Query, and typing API data end to end.
 - **Testing:** integration tests with Testcontainers and architecture tests.
