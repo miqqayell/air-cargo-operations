@@ -25,21 +25,21 @@ A system for planning air cargo flights and loads. A Spring Boot backend, built 
 
 ```mermaid
 flowchart LR
-    UI[React frontend<br/>Vite :5173] -->|/api + bearer token| API
-    UI -->|login, PKCE| KC[Keycloak :8180]
-    subgraph Backend [Spring Boot backend :8080]
-        API[REST adapters] --> F[flights module]
-        API --> L[loading module]
-        F <-->|domain events| L
-        F --> OB[Outbox]
+    UI["React frontend<br/>Vite :5173"] -->|"/api + bearer token"| API
+    UI -->|"login, PKCE"| KC["Keycloak :8180"]
+    subgraph Backend ["Spring Boot backend :8080"]
+        API["REST adapters"] --> F["flights module"]
+        API --> L["loading module"]
+        F <-->|"domain events"| L
+        F --> OB["Outbox"]
         L --> OB
     end
-    MQ[(RabbitMQ)] -->|SSM, ULD feeds| F
+    MQ[("RabbitMQ")] -->|"SSM, ULD feeds"| F
     MQ --> L
-    OB -->|FLM, MVT, CPM| MQ
-    F --> DB[(PostgreSQL)]
+    OB -->|"FLM, MVT, CPM"| MQ
+    F --> DB[("PostgreSQL")]
     L --> DB
-    API -.->|validates JWT| KC
+    API -.->|"validates JWT"| KC
 ```
 
 The backend is one deployable split into Spring Modulith modules per bounded context (`flights`, `loading`, plus supporting modules). Each module follows hexagonal architecture: the domain and application core have no framework dependencies, and adapters for web, persistence and messaging sit around it. Modules collaborate through public APIs and domain events published after commit. `ApplicationModules.verify()` checks the boundaries in a test.
