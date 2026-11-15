@@ -1,0 +1,65 @@
+### Log in as a flight planner
+POST http://localhost:8180/realms/air-freight/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&client_id=air-freight-api&username=t_flight_planner&password=t_password&scope=openid
+
+> {% client.global.set("access_token", response.body.access_token); %}
+
+### Log in as a load planner
+POST http://localhost:8180/realms/air-freight/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&client_id=air-freight-api&username=t_load_planner&password=t_password&scope=openid
+
+> {% client.global.set("access_token", response.body.access_token); %}
+
+### Log in as an admin
+POST http://localhost:8180/realms/air-freight/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&client_id=air-freight-api&username=t_admin&password=t_password&scope=openid
+
+> {% client.global.set("access_token", response.body.access_token); %}
+
+### Today's flights
+GET http://localhost:8080/api/flights
+Authorization: Bearer {{access_token}}
+
+### Simulate a schedule (admin)
+POST http://localhost:8080/api/simulator/schedules
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+[{"flightNumber": "HJ221", "departureAirport": "BRU", "arrivalAirport": "ATH", "aircraftRegistration": "SXBAA",
+  "firstDate": "2026-11-02", "lastDate": "2026-11-08", "weekdays": ["MONDAY", "WEDNESDAY", "FRIDAY"],
+  "departureTime": "06:30", "arrivalTime": "10:00"}]
+
+### Register a delay (flight planner)
+POST http://localhost:8080/api/flights/HJ221/2026-11-02/BRU/delays
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{"side": "DEPARTURE", "minutes": 20, "delayCode": "93", "description": "Late inbound aircraft"}
+
+### Read the flight policy
+GET http://localhost:8080/api/policy-settings/flights
+Authorization: Bearer {{access_token}}
+
+### Change the flight policy (admin)
+PUT http://localhost:8080/api/policy-settings/flights
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{"actualTimeToleranceMinutes": 5, "retentionDays": 7}
+
+### Read the loading policy
+GET http://localhost:8080/api/policy-settings/loading
+Authorization: Bearer {{access_token}}
+
+### Change the loading policy (admin)
+PUT http://localhost:8080/api/policy-settings/loading
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{"windowOpensHoursBeforeStd": 12, "windowClosesMinutesBeforeEtd": 20, "maxLateralDifferencePercent": 10, "offloadingCheck": "HARD"}

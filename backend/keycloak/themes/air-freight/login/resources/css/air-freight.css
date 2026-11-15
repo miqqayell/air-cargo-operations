@@ -1,0 +1,73 @@
+:root {
+    --keycloak-card-top-color: #B8922E;
+    --pf-v5-global--link--Color: #6E1026;
+    --pf-v5-global--link--Color--hover: #4F0A1A;
+    --pf-v5-global--primary-color--100: #6E1026;
+    --pf-v5-global--active-color--100: #6E1026;
+    --pf-v5-global--BackgroundColor--100: #FFFCFB;
+    --pf-v5-global--Color--100: #251C1D;
+    --pf-v5-global--Color--200: #6B5A5B;
+    --pf-v5-global--BorderColor--100: #E4D9D7;
+    --pf-v5-global--BorderColor--200: #D6CBCA;
+}
+
+.login-pf body {
+    background: #6E1026;
+}
+
+.login-pf body,
+.login-pf body *:not(i) {
+    font-family: Helvetica, "Helvetica Neue", Arial, sans-serif;
+    font-weight: 700;
+}
+
+.login-pf #kc-page-title {
+    font-weight: 700;
+}
+
+#kc-page-title,
+.pf-v5-c-form__label-text {
+    color: #251C1D;
+}
+
+#kc-header-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: #FFF9F5 !important;
+    font-size: 24px;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+#kc-header-wrapper::before {
+    content: "";
+    width: 32px;
+    height: 32px;
+    background: url("../img/logo.svg") center / contain no-repeat;
+}
+
+.pf-v5-c-login__main {
+    background-color: #FFFCFB;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.pf-v5-c-login__main-header {
+    border-top-width: 3px;
+}
+
+.pf-v5-c-form-control {
+    --pf-v5-c-form-control--focus--after--BorderBottomColor: #6E1026;
+    --pf-v5-c-form-control--hover--after--BorderBottomColor: #6E1026;
+}
+
+.pf-v5-c-button.pf-m-primary {
+    --pf-v5-c-button--m-primary--BackgroundColor: #6E1026;
+    --pf-v5-c-button--m-primary--hover--BackgroundColor: #4F0A1A;
+    --pf-v5-c-button--m-primary--focus--BackgroundColor: #4F0A1A;
+    --pf-v5-c-button--m-primary--active--BackgroundColor: #4F0A1A;
+    --pf-v5-c-button--m-primary--Color: #FFF9F5;
+    border-radius: 6px;
+}
